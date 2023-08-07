@@ -4,7 +4,7 @@ include("hw04-generics")
 include("hw06-annotations")
 include("hw06-annotations:test-application")
 include("hw06-annotations:test-framework")
-include("hw06-annotations:test-hello")
+include("hw08-gc")
 
 pluginManagement {
     val dependencyManagement: String by settings
@@ -20,7 +20,3 @@ pluginManagement {
         id("io.freefair.lombok") version freefairlombok
     }
 }
-
-//findProject(":hw06-annotations:test-application")?.name = "test-application"
-//findProject(":hw06-annotations:test-framework")?.name = "test-framework"
-//findProject(":hw06-annotations:test-hello")?.name = "test-hello"
