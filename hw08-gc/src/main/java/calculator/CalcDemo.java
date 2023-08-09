@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @SuppressWarnings("java:S106")
 public class CalcDemo {
     public static void main(String[] args) {
-        long counter = 100_000_000;
+        int counter = 100_000_000;
         var summator = new Summator();
         long startTime = System.currentTimeMillis();
 
