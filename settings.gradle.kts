@@ -6,6 +6,7 @@ include("hw06-annotations:test-application")
 include("hw06-annotations:test-framework")
 include("hw08-gc")
 include("hw10-bite-code")
+include("hw12-solid")
 
 pluginManagement {
     val dependencyManagement: String by settings
