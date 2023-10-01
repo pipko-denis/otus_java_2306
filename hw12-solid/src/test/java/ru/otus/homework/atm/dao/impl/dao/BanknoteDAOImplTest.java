@@ -2,8 +2,10 @@ package ru.otus.homework.atm.dao.impl.dao;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import ru.otus.homework.atm.api.Denomination;
 import ru.otus.homework.atm.impl.dao.banknote.BanknoteDAO;
 import ru.otus.homework.atm.api.exceptions.BanknoteDuplicateSerialException;
 import ru.otus.homework.atm.impl.dao.banknote.BanknoteDAOImpl;
@@ -16,9 +18,9 @@ class BanknoteDAOImplTest {
 
     private final static BanknoteDAO<BanknoteData> BANKNOTE_DAO = new BanknoteDAOImpl();
 
-    private static final Integer MAIN_DENOMINATION = 100;
+    private static final Denomination MAIN_DENOMINATION = Denomination.HUNDRED;
 
-    private static final Integer SECONDARY_DENOMINATION = 500;
+    private static final Denomination SECONDARY_DENOMINATION = Denomination.FIVE_HUNDRED;
 
     private final static BanknoteData BANKNOTE_TO_REMOVE = new BanknoteData(SECONDARY_DENOMINATION,9999);
     public static final int SERIAL_EXISTING_AFTER_INIT = 1;

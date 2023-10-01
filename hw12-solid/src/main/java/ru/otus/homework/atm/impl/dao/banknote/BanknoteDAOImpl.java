@@ -1,6 +1,7 @@
 package ru.otus.homework.atm.impl.dao.banknote;
 
 import lombok.NonNull;
+import ru.otus.homework.atm.api.Denomination;
 import ru.otus.homework.atm.api.exceptions.BanknoteDuplicateSerialException;
 import ru.otus.homework.atm.api.exceptions.BanknotesNotFoundException;
 import ru.otus.homework.atm.api.exceptions.RemoveBanknotesException;
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
 
 public class BanknoteDAOImpl implements BanknoteDAO<BanknoteData> {
 
-    private static final Map<Integer, List<BanknoteData>> BANKNOTE_STORAGE = new HashMap<>();
+    private final Map<Denomination, List<BanknoteData>> BANKNOTE_STORAGE = new HashMap<>();
 
     /**
      * Adds banknotes to the store     *
@@ -40,18 +41,18 @@ public class BanknoteDAOImpl implements BanknoteDAO<BanknoteData> {
         ) {
             throw new BanknoteDuplicateSerialException(
                     String.format("Banknote with denomination '%d' and serial '%d' already exists in the store",
-                            banknoteDTO.getDenomination(), banknoteDTO.getSerial())
+                            banknoteDTO.getDenomination().getValue(), banknoteDTO.getSerial())
             );
         }
     }
 
     @Override
-    public List<BanknoteData> getBanknotesByDenomination(Integer denomination) {
+    public List<BanknoteData> getBanknotesByDenomination(Denomination denomination) {
         return BANKNOTE_STORAGE.get(denomination);
     }
 
     @Override
-    public Map<Integer, List<BanknoteData>> getAll() {
+    public Map<Denomination, List<BanknoteData>> getAll() {
         return Map.copyOf(BANKNOTE_STORAGE);
     }
 
@@ -72,7 +73,7 @@ public class BanknoteDAOImpl implements BanknoteDAO<BanknoteData> {
         });
     }
 
-    private BanknoteData getBanknoteByDenominationSerial(@NonNull Integer denomination, @NonNull Integer serial) {
+    private BanknoteData getBanknoteByDenominationSerial(@NonNull Denomination denomination, @NonNull Integer serial) {
         List<BanknoteData> banknotesBySerial = getBanknotesBySerial(BANKNOTE_STORAGE.get(denomination), serial);
 
         if (banknotesBySerial.size() != 1){

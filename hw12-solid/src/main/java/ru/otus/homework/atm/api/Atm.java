@@ -9,6 +9,6 @@ public interface Atm<T extends BanknoteDTO> {
 
     void acceptMoney(List<T> banknotes);
 
-    Map<Integer, Integer> getBalance();
+    Map<Denomination, Integer> getBalance();
 
 }
