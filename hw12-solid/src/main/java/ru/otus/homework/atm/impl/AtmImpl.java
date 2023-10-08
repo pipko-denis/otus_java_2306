@@ -25,17 +25,13 @@ public class AtmImpl implements Atm<Banknote> {
 
     private final BanknoteMapper banknoteMapper;
 
-    private Map<Denomination, Integer> getBalanceIndeed() {
-        return banknoteDAO.getAll().entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, el -> el.getValue().size()));
-    }
 
     @Override
-    public List<Banknote> giveOutMoney(Integer amountNeeded) {
+    public List<Banknote> giveOutMoney(int amountNeeded) {
 
         List<BanknoteData> banknotesData = new ArrayList<>();
 
-        Map<Integer, Integer> balance = getBalanceIndeed().entrySet().stream()
+        Map<Integer, Integer> balance = getBalance().entrySet().stream()
                 .collect(Collectors.toMap(el -> el.getKey().getValue(), Map.Entry::getValue));
 
         calculationService.calcAmount(balance, amountNeeded)
@@ -76,6 +72,7 @@ public class AtmImpl implements Atm<Banknote> {
 
     @Override
     public Map<Denomination, Integer> getBalance() {
-        return getBalanceIndeed();
+        return banknoteDAO.getAll().entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, el -> el.getValue().size()));
     }
 }

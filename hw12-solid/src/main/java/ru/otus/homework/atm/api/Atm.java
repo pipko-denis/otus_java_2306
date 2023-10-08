@@ -5,7 +5,7 @@ import java.util.Map;
 
 public interface Atm<T extends BanknoteDTO> {
 
-    List<T> giveOutMoney(Integer amount);
+    List<T> giveOutMoney(int amount);
 
     void acceptMoney(List<T> banknotes);
 
