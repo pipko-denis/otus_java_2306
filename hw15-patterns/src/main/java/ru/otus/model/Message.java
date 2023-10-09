@@ -1,5 +1,7 @@
 package ru.otus.model;
 
+import java.util.Optional;
+
 @SuppressWarnings({"java:S107", "java:S1135"})
 public class Message {
     private final long id;
@@ -91,6 +93,18 @@ public class Message {
         return field10;
     }
 
+    public String getField11() {
+        return field11;
+    }
+
+    public String getField12() {
+        return field12;
+    }
+
+    public ObjectForMessage getField13() {
+        return field13;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -106,8 +120,16 @@ public class Message {
         return (int) (id ^ (id >>> 32));
     }
 
+    public Message deepCopy(){
+        return this.toBuilder().build();
+    }
+
     public Builder toBuilder() {
-        return new Builder(id, field1, field2, field3, field4, field5, field6, field7, field8, field9, field10, field11, field12, field13);
+        return new Builder(id, field1, field2, field3, field4, field5, field6, field7, field8, field9, field10, field11, field12,
+                Optional.ofNullable(field13)
+                        .map(objectForMessage -> objectForMessage.toBuilder().build())
+                        .orElse(null)
+        );
     }
 
 
@@ -146,11 +168,11 @@ public class Message {
                 + ", field10='"
                 + field10
                 + '\''
-                +", field11='"
+                + ", field11='"
                 + field11 + '\''
-                +", field12='"
+                + ", field12='"
                 + field12 + '\''
-                +", field13="
+                + ", field13="
                 + field13
                 + '}';
     }
