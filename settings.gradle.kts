@@ -8,6 +8,7 @@ include("hw08-gc")
 include("hw10-bite-code")
 include("hw12-solid")
 include("hw15-patterns")
+include("hw16-io")
 
 pluginManagement {
     val dependencyManagement: String by settings
