@@ -1,7 +1,16 @@
 package ru.otus.crm.model;
 
+import ru.otus.jdbc.api.Column;
+import ru.otus.jdbc.api.Id;
+import ru.otus.jdbc.api.Table;
+
+@Table(name = "client")
 public class Client {
+    @Id
+    @Column
     private Long id;
+
+    @Column
     private String name;
 
     public Client() {}

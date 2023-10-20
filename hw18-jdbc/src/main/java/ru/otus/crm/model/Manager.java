@@ -1,8 +1,19 @@
 package ru.otus.crm.model;
 
+import ru.otus.jdbc.api.Column;
+import ru.otus.jdbc.api.Id;
+import ru.otus.jdbc.api.Table;
+
+@Table(name = "manager")
 public class Manager {
+    @Id
+    @Column
     private Long no;
+
+    @Column
     private String label;
+
+    @Column
     private String param1;
 
     public Manager() {}
