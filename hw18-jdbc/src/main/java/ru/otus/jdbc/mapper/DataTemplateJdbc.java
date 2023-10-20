@@ -8,8 +8,8 @@ import ru.otus.jdbc.exceptions.HandleDatabaseResponceException;
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,40 +29,6 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
         this.dbExecutor = dbExecutor;
         this.entitySQLMetaData = entitySQLMetaData;
         this.entityClassMetaData = entityClassMetaData;
-    }
-
-    private T getNewDataInstance() {
-        try {
-            return entityClassMetaData.getConstructor().newInstance();
-        } catch (Exception e) {
-            throw new CreateNewInstanceException(e);
-        }
-    }
-
-    private T singleResultHandler(ResultSet rs, List<Field> allFields) {
-        T result = getNewDataInstance();
-        for (Field field : allFields) {
-            try {
-                String fieldName = field.getName();
-                field.setAccessible(true);
-                field.set(result, rs.getObject(fieldName));
-            } catch (Exception e) {
-                throw new HandleDatabaseResponceException(e);
-            }
-        }
-        return result;
-    }
-
-    private List<Object> getParamsList(T entity, List<Field> fields) {
-        return fields.stream().map(field -> {
-                    try {
-                        field.setAccessible(true);
-                        return field.get(entity);
-                    } catch (IllegalAccessException e) {
-                        throw new RuntimeException(e);
-                    }
-                })
-                .collect(Collectors.toList());
     }
 
     @Override
@@ -112,5 +78,54 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
         dbExecutor.executeStatement(connection,
                 entitySQLMetaData.getUpdateSql(),
                 getParamsList(entity, fields));
+    }
+
+    private T getNewDataInstance() {
+        try {
+            return entityClassMetaData.getConstructor().newInstance();
+        } catch (Exception e) {
+            throw new CreateNewInstanceException(e);
+        }
+    }
+
+    private T singleResultHandler(ResultSet rs, List<Field> allFields) {
+        T entity = getNewDataInstance();
+        allFields.forEach(field -> {
+            Object dbFieldValue = getDbFieldValue(rs, field);
+            setEntityFieldValue(entity, field, dbFieldValue);
+        });
+        return entity;
+    }
+
+    private Object getDbFieldValue(ResultSet rs, Field field) {
+        try {
+            return rs.getObject(field.getName());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void setEntityFieldValue(T entity, Field field, Object value) {
+        try {
+            field.setAccessible(true);
+            field.set(entity, value);
+        } catch (Exception e) {
+            throw new HandleDatabaseResponceException(e);
+        }
+    }
+
+    private List<Object> getParamsList(T entity, List<Field> fields) {
+        return fields.stream()
+                .map(field -> getEntityFieldValue(entity, field))
+                .collect(Collectors.toList());
+    }
+
+    private Object getEntityFieldValue(T entity, Field field) {
+        try {
+            field.setAccessible(true);
+            return field.get(entity);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
