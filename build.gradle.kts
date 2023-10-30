@@ -27,6 +27,7 @@ allprojects {
         mavenCentral()
     }
 
+    val testcontainersBom: String by project
     val guava: String by project
     val glassfishJson: String by project
 
@@ -36,6 +37,7 @@ allprojects {
         dependencies {
             imports {
                 mavenBom(BOM_COORDINATES)
+                mavenBom("org.testcontainers:testcontainers-bom:$testcontainersBom")
             }
             dependency("com.google.guava:guava:$guava")
             dependency("org.glassfish:jakarta.json:$glassfishJson")
