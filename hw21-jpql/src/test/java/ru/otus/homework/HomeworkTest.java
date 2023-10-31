@@ -43,7 +43,7 @@ class HomeworkTest {
         sessionFactory.close();
     }
 
-    @Disabled("Удалить при выполнении ДЗ")
+    //@Disabled("Удалить при выполнении ДЗ")
     @Test
     void testHomeworkRequirementsForTablesCount() {
 
@@ -53,7 +53,7 @@ class HomeworkTest {
         assertThat(tables).hasSize(3);
     }
 
-    @Disabled("Удалить при выполнении ДЗ")
+    //@Disabled("Удалить при выполнении ДЗ")
     @Test
     void testHomeworkRequirementsForUpdatesCount() {
         applyCustomSqlStatementLogger(new SqlStatementLogger(true, false, false, 0) {
@@ -81,7 +81,7 @@ class HomeworkTest {
         }
     }
 
-    @Disabled("Удалить при выполнении ДЗ")
+    //@Disabled("Удалить при выполнении ДЗ")
     @Test
     void testForHomeworkRequirementsForClientReferences() throws Exception {
         var client = new Client(
@@ -92,7 +92,7 @@ class HomeworkTest {
         assertThatClientHasCorrectReferences(client);
     }
 
-    @Disabled("Удалить при выполнении ДЗ")
+    //@Disabled("Удалить при выполнении ДЗ")
     @Test
     void testForHomeworkRequirementsForClonedClientReferences() throws Exception {
         var client = new Client(

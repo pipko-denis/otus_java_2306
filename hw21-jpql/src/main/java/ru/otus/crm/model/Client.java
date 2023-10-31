@@ -8,7 +8,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
@@ -35,14 +34,12 @@ public class Client implements Cloneable {
     @Column(name = "name")
     private String name;
 
-    //    @ManyToOne(cascade = CascadeType.ALL)
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "address_id")
     private Address address;
 
-//    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//    @JoinColumn(name = "client_id")
-//    private List<Phone> phones;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "client")
+    private List<Phone> phones;
 
     public Client(String name) {
         this.id = null;
@@ -57,14 +54,22 @@ public class Client implements Cloneable {
     public Client(Long id, String name, Address address, List<Phone> phones) {
         this.id = id;
         this.name = name;
-        System.out.println(address);
-        //this.address = address;
+        this.address = address;
+        if (phones != null) {
+            phones.forEach(phone -> phone.setClient(this));
+            this.phones = phones;
+        }
     }
 
     @Override
     @SuppressWarnings({"java:S2975", "java:S1182"})
     public Client clone() {
-        return new Client(this.id, this.name);
+        return new Client(this.id, this.name,
+                (this.address == null) ? null : this.address.clone(),
+                (this.phones == null) ? null : this.phones.stream()
+                        .map(Phone::clone)
+                        .toList()
+        );
     }
 
     @Override
