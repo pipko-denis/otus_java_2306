@@ -16,6 +16,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Getter
@@ -56,9 +58,14 @@ public class Client implements Cloneable {
         this.name = name;
         this.address = address;
         if (phones != null) {
-            phones.forEach(phone -> phone.setClient(this));
-            this.phones = phones;
+            this.phones = new ArrayList<>();
+            phones.forEach(phone -> {
+                var phoneClone = phone.clone();
+                phoneClone.setClient(this);
+                this.phones.add(phoneClone);
+            });
         }
+
     }
 
     @Override
