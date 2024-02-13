@@ -11,6 +11,7 @@ include("hw15-patterns")
 include("hw16-io")
 include("hw18-jdbc")
 include("hw21-jpql")
+include("hw24-webServer")
 
 pluginManagement {
     val dependencyManagement: String by settings
